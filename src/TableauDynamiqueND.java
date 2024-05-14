@@ -72,6 +72,23 @@ public class TableauDynamiqueND {
         }
     }
 
+    public Boolean getState(int ... index){
+        if(index.length != dimension){
+            throw new IllegalArgumentException("Le nombre d'index ne correspond pas à la dimension");
+        }
+        for(int i = 0; i < index.length; i++){
+            if(index[0] >= taille){
+                throw new IllegalArgumentException("Index hors de la grille");
+            }
+        }
+        if(index.length == 1){
+            return ((Cellule)tab[index[0]]).getEtat();
+        }
+        else{
+            return ((TableauDynamiqueND)tab[index[0]]).getState(Arrays.copyOfRange(index, 1, index.length));
+        }
+    }
+
     public void display(){
         for(int i = 0; i < taille; i++){
             tab[i].display();
@@ -98,10 +115,10 @@ public class TableauDynamiqueND {
     }
 
     public static void main(String[] args){
-        int tailles[] = {50, 5};
+        int tailles[] = {50, 50, 50};
         TableauDynamiqueND tab = new TableauDynamiqueND(tailles);
         tab.display();
-        tab.changeState(0, 0);
+        tab.changeState(0, 0, 0);
         System.out.println();
         tab.display(2);
         tab.display(0);

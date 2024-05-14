@@ -8,10 +8,10 @@ public class Main
 	{
 		int posx, posy;
 
-		TableauDynamiqueND tab = new TableauDynamiqueND(10, 15);
+		TableauDynamiqueND tab = new TableauDynamiqueND(300, 300);
 
 
-		GrilleGraphique grid = new GrilleGraphique(tab.getTaille(), tab.getTab()[0].getTaille(), 30);
+		GrilleGraphique grid = new GrilleGraphique(tab.getTaille(), tab.getTab()[0].getTaille(), 8);
 		
 		Random r = new Random();
 		

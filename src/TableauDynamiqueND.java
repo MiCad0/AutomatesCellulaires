@@ -19,15 +19,22 @@ import java.util.Arrays;
 public class TableauDynamiqueND {
     private int dimension;
     private int taille;
-    private TableauDynamiqueND[] tab;
+    private Object[] tab;
 
-    public TableauDynamiqueND(int dimension, int taille){
+    public TableauDynamiqueND(int dimension, int ... taille){
         this.dimension = dimension;
-        this.taille = taille;
-        for(int i = 0; i < dimension; i++){
-            tab[i] = new TableauDynamiqueND(dimension - 1, taille);
+        this.taille = taille[0];
+        if(dimension != taille.length){
+            throw new IllegalArgumentException("La dimension et la taille ne correspondent pas");
         }
-        
+        if(dimension == 1){
+            tab = new Cellule[taille[0]];
+        }
+        else{
+            for(int i = 0; i < taille[0]; i++){
+                tab[i] = new TableauDynamiqueND(dimension - 1, Arrays.copyOfRange(taille, 1, taille.length));
+            }
+        }
     }
 
     public int getDimension(){
@@ -36,6 +43,37 @@ public class TableauDynamiqueND {
 
     public int getTaille(){
         return this.taille;
+    }
+
+    public Object[] getTab(){
+        return this.tab;
+    }
+
+    public void changeState(int ... index){
+        if(index.length == 1){
+            ((Cellule)tab[index[0]]).setEtat(!((Cellule)tab[index[0]]).getEtat());
+        }
+        else{
+            ((TableauDynamiqueND)tab[index[0]]).changeState(Arrays.copyOfRange(index, 1, index.length));
+        }
+    }
+
+    public void display(){
+        if(dimension == 1){
+            for(int i = 0; i < taille; i++){
+                System.out.println(((Cellule)tab[i]).getEtat());
+            }
+        }
+        else{
+            for(int i = 0; i < taille; i++){
+                ((TableauDynamiqueND)tab[i]).display();
+            }
+        }
+    }
+
+    public static void main(String[] args){
+        TableauDynamiqueND tab = new TableauDynamiqueND(2, 5, 5);
+        tab.display();
     }
 
 }

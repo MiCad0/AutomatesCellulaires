@@ -6,6 +6,10 @@ public class Cellule {
         this.etat = etat;
     }
 
+    public Cellule(){
+        this.etat = false;
+    }
+
     public Boolean getEtat(){
         return this.etat;
     }
@@ -13,4 +17,5 @@ public class Cellule {
     public void setEtat(Boolean etat){
         this.etat = etat;
     }
+
 }

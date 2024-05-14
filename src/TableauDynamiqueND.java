@@ -22,13 +22,17 @@ public class TableauDynamiqueND {
     private Object[] tab;
 
     public TableauDynamiqueND(int dimension, int ... taille){
-        this.dimension = dimension;
-        this.taille = taille[0];
         if(dimension != taille.length){
             throw new IllegalArgumentException("La dimension et la taille ne correspondent pas");
         }
+        this.dimension = dimension;
+        this.taille = taille[0];
+        this.tab = new Object[taille[0]];
         if(dimension == 1){
-            tab = new Cellule[taille[0]];
+            for(int i = 0; i < taille[0]; i++){
+                tab[i] = new Cellule();
+            }
+
         }
         else{
             for(int i = 0; i < taille[0]; i++){
@@ -50,6 +54,14 @@ public class TableauDynamiqueND {
     }
 
     public void changeState(int ... index){
+        if(index.length != dimension){
+            throw new IllegalArgumentException("Le nombre d'index ne correspond pas à la dimension");
+        }
+        for(int i = 0; i < index.length; i++){
+            if(index[i] >= taille){
+                throw new IllegalArgumentException("Index hors de la grille");
+            }
+        }
         if(index.length == 1){
             ((Cellule)tab[index[0]]).setEtat(!((Cellule)tab[index[0]]).getEtat());
         }
@@ -61,8 +73,9 @@ public class TableauDynamiqueND {
     public void display(){
         if(dimension == 1){
             for(int i = 0; i < taille; i++){
-                System.out.println(((Cellule)tab[i]).getEtat());
+                System.out.print(((Cellule)tab[i]).getEtat() + " ");
             }
+            System.out.println();
         }
         else{
             for(int i = 0; i < taille; i++){
@@ -72,7 +85,8 @@ public class TableauDynamiqueND {
     }
 
     public static void main(String[] args){
-        TableauDynamiqueND tab = new TableauDynamiqueND(2, 5, 5);
+        int tailles[] = {5, 5};
+        TableauDynamiqueND tab = new TableauDynamiqueND(2, tailles);
         tab.display();
     }
 

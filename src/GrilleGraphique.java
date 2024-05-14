@@ -32,7 +32,7 @@ public class GrilleGraphique extends JPanel
 		casesAColorier = new ArrayList<>(25);
 
 		JFrame window = new JFrame();
-		window.setSize(largeur*taille_case+50, hauteur*taille_case+50);
+		window.setSize(largeur*taille_case+75, hauteur*taille_case+100);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(this);
 		window.setVisible(true);

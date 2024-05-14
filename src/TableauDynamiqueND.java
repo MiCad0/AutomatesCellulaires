@@ -27,6 +27,7 @@ public class TableauDynamiqueND {
         for(int i = 0; i < dimension; i++){
             tab[i] = new TableauDynamiqueND(dimension - 1, taille);
         }
+        
     }
 
     public int getDimension(){

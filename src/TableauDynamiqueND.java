@@ -97,12 +97,7 @@ public class TableauDynamiqueND {
     }
 
     public void display(int ... coupe){
-        if(coupe.length == 0){
-            for(int i = 0; i < taille; i++){
-                tab[i].display();
-            }
-        }
-        else if(coupe.length == 1){
+        if(coupe.length == 1){
             tab[coupe[0]].display();
         }
         else{
@@ -110,18 +105,43 @@ public class TableauDynamiqueND {
         }
     }
 
-    public void draw(){
+    // Prend un couple de m coordonnées et renvoie le tableau dynamique n-m dimensionnel correspondant
+    public TableauDynamiqueND slice(int ... coupe){
+        if (coupe.length %2 != 0){
+            throw new IllegalArgumentException("Le nombre de coordonnées doit être pair");
+        }
 
+        if(coupe.length == 0){
+            return this;
+        }
+        else{
+            int[] newTailles = new int[coupe.length/2];
+            for(int i = 0; i < coupe.length; i+=2){
+                newTailles[i/2] = coupe[i+1] - coupe[i]+1;
+            }
+            TableauDynamiqueND res = new TableauDynamiqueND(newTailles);
+            for(int i = coupe[0]; i <= coupe[1]; i++){
+                res.tab[i-coupe[0]] = tab[i].slice(Arrays.copyOfRange(coupe, 2, coupe.length));
+            }
+            return res;
+        }
     }
+
+    public Voisinage voisinage(int type, int ... index){
+        return new Voisinage(type, this, index);
+    }
+
 
     public static void main(String[] args){
-        int tailles[] = {50, 50, 50};
+        int tailles[] = {10, 10};
         TableauDynamiqueND tab = new TableauDynamiqueND(tailles);
-        tab.display();
-        tab.changeState(0, 0, 0);
+        // tab.display();
+        tab.changeState(0, 0);
         System.out.println();
-        tab.display(2);
-        tab.display(0);
+        tab.slice( 3, 3, 3, 3).display();
+        Voisinage voisinage = tab.slice(0, 5, 0, 5).voisinage(2, 0, 1);
+        voisinage.display();
     }
+
 
 }

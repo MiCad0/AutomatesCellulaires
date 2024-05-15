@@ -23,10 +23,7 @@ public class Cellule extends TableauDynamiqueND{
     }
 
     public void display(int ... index){
-        if(index.length != 0){
-            throw new IllegalArgumentException("Le nombre d'index ne correspond pas à la dimension");
-        }
-        System.out.print(this.etat + " ");
+        throw new IllegalArgumentException("Impossible d'afficher la coupe d'une cellule");
     }
 
 }

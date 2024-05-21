@@ -20,25 +20,29 @@ public class TableauDynamiqueND {
     private int dimension;
     private int taille;
     private TableauDynamiqueND[] tab;
+    Coords currentCoords;
 
-    public TableauDynamiqueND(int ... taille){
+    public TableauDynamiqueND(Coords coords, int ... taille){
+        this.currentCoords = coords;
         if(taille.length == 0){
             this.taille = 1;
+            return;
         }
         else{
             this.taille = taille[0];
+            this.dimension = taille.length;
             this.tab = new TableauDynamiqueND[this.taille];
         }
-        this.dimension = taille.length;
         if(dimension == 1){
             for(int i = 0; i < this.taille; i++){
-                tab[i] = new Cellule();
+                currentCoords.setCoord(currentCoords.getCoords().length - 1, i);
+                this.tab[i] = new Cellule(false, currentCoords.getCoords());
             }
-
         }
         else if (dimension > 1){
             for(int i = 0; i < this.taille; i++){
-                tab[i] = new TableauDynamiqueND(Arrays.copyOfRange(taille, 1, dimension));
+                currentCoords.setCoord(currentCoords.getCoords().length - dimension, i);
+                this.tab[i] = new TableauDynamiqueND(currentCoords, Arrays.copyOfRange(taille, 1, taille.length));
             }
         }
     }
@@ -119,7 +123,7 @@ public class TableauDynamiqueND {
             for(int i = 0; i < coupe.length; i+=2){
                 newTailles[i/2] = coupe[i+1] - coupe[i]+1;
             }
-            TableauDynamiqueND res = new TableauDynamiqueND(newTailles);
+            TableauDynamiqueND res = new TableauDynamiqueND(new Coords(newTailles.length), newTailles);
             for(int i = coupe[0]; i <= coupe[1]; i++){
                 res.tab[i-coupe[0]] = tab[i].slice(Arrays.copyOfRange(coupe, 2, coupe.length));
             }
@@ -133,13 +137,13 @@ public class TableauDynamiqueND {
 
 
     public static void main(String[] args){
-        int tailles[] = {3, 10, 5};
-        TableauDynamiqueND tab = new TableauDynamiqueND(tailles);
+        int tailles[] = {5, 5, 5};
+        TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(tailles.length), tailles);
         // tab.display();
         tab.changeState(2, 2, 2);
         System.out.println();
-        // tab.slice( 3, 3, 3, 3).display();
-        Voisinage voisinage = tab.voisinage(4, 2, 2, 2);
-        voisinage.display();
+        tab.slice( 1, 1).display();
+        // Voisinage voisinage = tab.voisinage(8, 2, 2, 2);
+        // voisinage.display();
     }
 }

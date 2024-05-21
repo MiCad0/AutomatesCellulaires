@@ -1,13 +1,20 @@
 public class Cellule extends TableauDynamiqueND{
     
     private Boolean etat;
+    private Coords Coords;
 
-    public Cellule(Boolean etat){
+    public Cellule(Boolean etat, int ... coords){
+        super(new Coords(coords));
         this.etat = etat;
+        this.Coords = new Coords(coords.length);
+        for(int i = 0; i < coords.length; i++){
+            this.Coords.setCoord(i, coords[i]);
+        }
     }
 
-    public Cellule(){
-        this.etat = false;
+    public Cellule(Boolean etat){
+        super(new Coords(0));
+        this.etat = etat;
     }
 
     public Boolean getEtat(){
@@ -19,11 +26,19 @@ public class Cellule extends TableauDynamiqueND{
     }
 
     public void display(){
-        System.out.print(this.etat + " ");
+        for(int c : Coords.getCoords()){
+            System.out.print(c + ",");
+        }
+        System.out.print(" ");
     }
 
     public void display(int ... index){
         throw new IllegalArgumentException("Impossible d'afficher la coupe d'une cellule");
     }
+
+    public int[] getCoords(){
+        return this.Coords.getCoords();
+    }
+
 
 }

@@ -8,7 +8,14 @@ public class Main
 	{
 		int posx, posy;
 
-		TableauDynamiqueND tab = new TableauDynamiqueND(300, 300);
+		TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(3), 300, 300);
+
+		int[] alive = tab.getAlive();
+
+		for(int a : alive)
+		{
+			System.out.println(a);
+		}
 
 
 		GrilleGraphique grid = new GrilleGraphique(tab.getTaille(), tab.getTab()[0].getTaille(), 8);

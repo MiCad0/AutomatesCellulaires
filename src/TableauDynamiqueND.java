@@ -135,14 +135,46 @@ public class TableauDynamiqueND {
         return new Voisinage(type, this, index);
     }
 
+    // récupère les coordonnées des cellules vivantes
+    public Coords[] getAlive(){
+        Coords[] res = new Coords[taille^dimension];
+        int index = 0;
+        if(dimension == 1){
+            for(int i = 0; i < taille; i++){
+                if(((Cellule)tab[i]).getEtat()){
+                    res[index++] = new Coords(((Cellule)tab[i]).getCoords());
+                }
+            }
+        }
+        else{
+            for(int i = 0; i < taille; i++){
+                Coords[] alive = ((TableauDynamiqueND)tab[i]).getAlive();
+                for(Coords c : alive){
+                    if(c != null){
+                        res[index++] = c;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
 
     public static void main(String[] args){
         int tailles[] = {5, 5, 5};
         TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(tailles.length), tailles);
         // tab.display();
         tab.changeState(2, 2, 2);
+        tab.changeState(1, 0, 0);
+        tab.changeState(1, 1, 2);
         System.out.println();
         tab.slice( 1, 1).display();
+        Coords[] alive = tab.getAlive();
+        for(Coords c : alive){
+            if(c != null){
+                c.display();
+            }
+        }
         // Voisinage voisinage = tab.voisinage(8, 2, 2, 2);
         // voisinage.display();
     }

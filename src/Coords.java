@@ -19,4 +19,11 @@ public class Coords {
     public void setCoord(int index, int value){
         this.values[index] = value;
     }
+
+    public void display(){
+        for(int c : values){
+            System.out.print(c + ",");
+        }
+        System.out.print(" ");
+    }
 }

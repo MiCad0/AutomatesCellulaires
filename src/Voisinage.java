@@ -10,9 +10,6 @@ public class Voisinage{
             this.voisinage[0] = (Cellule)grille.getTab()[index[0]];
         }
         else if(type == 2){
-            // if(grille.getDimension() != 1){
-            //     throw new IllegalArgumentException("Le type de voisinage ne correspond pas à la dimension de la grille");
-            // }
             this.voisinage = new Cellule[3];
             for(int i = 0; i < 3; ++i){
                 int n = index[0] + i - 1;
@@ -30,9 +27,42 @@ public class Voisinage{
         }
         else if(type == 4){
             this.voisinage = new Cellule[5];
+            int x = 0;
+            for(int i = 0; i < 3; ++i){
+                int n = index[0]+i-1;
+                for(int j = 0; j < 3; ++j){
+                    if((i == 0 && j == 0) || (i == 2 && j == 0) || (i == 0 && j == 2) || (i == 2 && j == 2)){
+                        continue;
+                    }
+                    if ((n < 0 ) || (n >= grille.getTaille()) || (index[1]+j-1 < 0)){
+                        this.voisinage[x++] = new Cellule(false);
+                    }
+                    else if (index[1]+j-1 < grille.getTab()[n].getTaille()){
+                        TableauDynamiqueND tmpTab = grille.getTab()[n];
+                        while(tmpTab.getDimension() > 2){
+                            tmpTab = tmpTab.getTab()[0];
+                        }
+                        this.voisinage[x++] = (Cellule)tmpTab.getTab()[n].getTab()[index[1] + j - 1];
+                    }
+                    else{
+                        this.voisinage[x++] = new Cellule(false);
+                    }
+                }
+            }
+        }
+        else if(type == 8){
+            this.voisinage = new Cellule[9];
             for(int i = 0; i < 3; ++i){
                 for(int j = 0; j < 3; ++j){
-                    this.voisinage[i*3 + j] = (Cellule)grille.getTab()[index[0] + i - 1].getTab()[index[1] + j - 1];
+                    if ((index[0]+i-1 < 0 ) || (index[0]+i-1 >= grille.getTaille()) || (index[1]+j-1 < 0)){
+                        this.voisinage[i*3 + j] = new Cellule(false);
+                    }
+                    else if (index[1]+j-1 < grille.getTab()[index[0]+i-1].getTaille()){
+                        this.voisinage[i*3 + j] = (Cellule)grille.getTab()[index[0] + i - 1].getTab()[index[1] + j - 1];
+                    }
+                    else{
+                        this.voisinage[i*3 + j] = new Cellule(false);
+                    }
                 }
             }
         }

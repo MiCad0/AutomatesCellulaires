@@ -133,15 +133,13 @@ public class TableauDynamiqueND {
 
 
     public static void main(String[] args){
-        int tailles[] = {10, 10};
+        int tailles[] = {3, 10, 5};
         TableauDynamiqueND tab = new TableauDynamiqueND(tailles);
         // tab.display();
-        tab.changeState(0, 0);
+        tab.changeState(2, 2, 2);
         System.out.println();
-        tab.slice( 3, 3, 3, 3).display();
-        Voisinage voisinage = tab.slice(0, 5, 0, 5).voisinage(2, 0, 1);
+        // tab.slice( 3, 3, 3, 3).display();
+        Voisinage voisinage = tab.voisinage(4, 2, 2, 2);
         voisinage.display();
     }
-
-
 }

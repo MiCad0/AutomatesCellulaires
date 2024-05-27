@@ -10,11 +10,14 @@ public class Main
 
 		TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(3), 300, 300);
 
-		int[] alive = tab.getAlive();
+		Coords[] alive = tab.getAlive();
 
-		for(int a : alive)
+		for(Coords a : alive)
 		{
-			System.out.println(a);
+			if(a != null)
+			{
+				a.display();
+			}
 		}
 
 

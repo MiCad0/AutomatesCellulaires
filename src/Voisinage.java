@@ -36,131 +36,42 @@ elle-mˆeme, sa voisine en haut `a droite et sa voisine du dessous, on ´ecrirai
 G3 = {(0, 0, 0),(1, 1, 0),(−1, 0, 0)}
  */
 
+import java.util.ArrayList;
 
 public class Voisinage{
-    private Cellule [] voisinage;
-    private int type;
+    private ArrayList<Cellule> voisinage;
+    private Coords[] regle;
 
-    public Voisinage(int type, TableauDynamiqueND grille, int ... index){
-        this.type = type;
-
-        // On crée le voisinage en fonction du type de voisinage
-        
-        // Soi-même
-        
-        if (type == 0){
-            this.voisinage = new Cellule[1];
-            this.voisinage[0] = (Cellule)grille.getTab()[index[0]];
-        }
-        
-        // Ses deux voisins 1D
-        else if(type == 2){
-            this.voisinage = new Cellule[3];
-            for(int i = 0; i < 3; ++i){
-                int n = index[0] + i - 1;
-                if(n<0 || n>=grille.getTaille()){
-                    this.voisinage[i] = new Cellule(false);
-                }
-                else{
-                    TableauDynamiqueND tmpTab = grille.getTab()[n];
-                    while(tmpTab.getDimension() > 1){
-                        tmpTab = tmpTab.getTab()[0];
-                    }
-                    this.voisinage[i] = (Cellule)tmpTab.getTab()[n];
+    public Voisinage(Coords[] regle, TableauDynamiqueND grille, int ... index){
+        this.regle = regle;
+        this.voisinage = new ArrayList<Cellule>();
+        // On crée le voisinage en fonction des règles de voisinage
+        int n = grille.getDimension();
+        int[] tmp = new int[n]; // On crée un tableau de taille n pour stocker les coordonnées du voisin à ajouter
+        for(Coords e : regle){
+            for(int i = 0; i<n; i++){
+                tmp[i] = index[i];
+                if(i < e.getCoords().length){
+                    tmp[i] += e.getCoords()[i];
                 }
             }
-        }
-
-        // Ses voisins directs en 2D
-        else if(type == 4){
-            this.voisinage = new Cellule[5];
-            int x = 0;
-            for(int i = 0; i < 3; ++i){
-                int n = index[0]+i-1;
-                for(int j = 0; j < 3; ++j){
-                    if((i == 0 && j == 0) || (i == 2 && j == 0) || (i == 0 && j == 2) || (i == 2 && j == 2)){
-                        continue;
-                    }
-                    if ((n < 0 ) || (n >= grille.getTaille()) || (index[1]+j-1 < 0)){
-                        this.voisinage[x++] = new Cellule(false);
-                    }
-                    else if (index[1]+j-1 < grille.getTab()[n].getTaille()){
-                        TableauDynamiqueND tmpTab = grille.getTab()[n];
-                        while(tmpTab.getDimension() > 2){
-                            tmpTab = tmpTab.getTab()[0];
-                        }
-                        this.voisinage[x++] = (Cellule)tmpTab.getTab()[n].getTab()[index[1] + j - 1];
-                    }
-                    else{
-                        this.voisinage[x++] = new Cellule(false, new Coords(i, j));
-                    }
-                }
-            }
-        }
-
-        // Ses voisins directs + en diagonale en 2D
-        else if(type == 8){
-            this.voisinage = new Cellule[9];
-            for(int i = 0; i < 3; ++i){
-                int n = index[0]+i-1;
-                for(int j = 0; j < 3; ++j){
-                    if ((index[0]+i-1 < 0 ) || (index[0]+i-1 >= grille.getTaille()) || (index[1]+j-1 < 0)){
-                        this.voisinage[i*3 + j] = new Cellule(false);
-                    }
-                    else if (index[1]+j-1 < grille.getTab()[index[0]+i-1].getTaille()){
-                        TableauDynamiqueND tmpTab = grille.getTab()[n];
-                        while(tmpTab.getDimension() > 2){
-                            tmpTab = tmpTab.getTab()[0];
-                        }
-                        this.voisinage[i*3 + j] = (Cellule)tmpTab.getTab()[index[0] + i - 1].getTab()[index[1] + j - 1];
-                    }
-                    else{
-                        this.voisinage[i*3 + j] = new Cellule(false, new Coords(i, j));
-                    }
-                }
-            }
-        }
-
-        // Ses voisins directs en 3D
-        else if(type == 6){
-            this.voisinage = new Cellule[7];
-            int x = 0;
-            for(int i = 0; i < 3; ++i){
-                for(int j = 0; j < 3; ++j){
-                    for(int k = 0; k < 3; ++k){
-                        if ((index[0]+i-1 < 0 ) || (index[0]+i-1 >= grille.getTaille()) || 
-                            (index[1]+j-1 < 0) || (index[1]+j-1 >= grille.getTab()[index[0]+i-1].getTaille()) ||
-                            (index[2]+k-1 < 0) || (index[2]+k-1 >= grille.getTab()[index[0]+i-1].getTab()[index[1]+j-1].getTaille())){
-                            this.voisinage[x++] = new Cellule(false, new Coords(i, j, k));
-                        }
-                        else{
-                            TableauDynamiqueND tmpTab = grille.getTab()[index[0] + i - 1];
-                            while(tmpTab.getDimension() > 3){
-                                tmpTab = tmpTab.getTab()[0];
-                            }
-                            this.voisinage[x++] = (Cellule)tmpTab.getTab()[index[0] + i - 1].getTab()[index[1] + j - 1].getTab()[index[2] + k - 1];
-                        }
-                    }
-                }
-            }
-        }
-        else{
-            throw new IllegalArgumentException("Type de voisinage non reconnu");
+            this.voisinage.add(new Cellule(grille.getState(tmp)));
+            System.out.println("Voisinage ajouté : " + grille.getState(tmp) + " en " + tmp[0] + " " + tmp[1] + " " + tmp[2]);
         }
         System.out.println("");
     }
 
-    public Cellule[] getVoisinage(){
+    public ArrayList<Cellule> getVoisinage(){
         return this.voisinage;
     }
 
-    public int getType(){
-        return this.type;
+    public Coords[] getRegle(){
+        return this.regle;
     }
 
     public void display(){
-        for(int i = 0; i < this.voisinage.length; i++){
-            this.voisinage[i].display();
+        for(Cellule c : voisinage){
+            System.out.print(c.getEtat() + " ");
         }
         System.out.println();
     }

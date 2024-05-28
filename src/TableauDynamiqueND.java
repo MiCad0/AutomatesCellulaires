@@ -131,8 +131,8 @@ public class TableauDynamiqueND {
         }
     }
 
-    public Voisinage voisinage(int type, int ... index){
-        return new Voisinage(type, this, index);
+    public Voisinage voisinage(Coords[] regle, int ... index){
+        return new Voisinage(regle, this, index);
     }
 
     // récupère les coordonnées des cellules vivantes
@@ -175,7 +175,11 @@ public class TableauDynamiqueND {
                 c.display();
             }
         }
-        // Voisinage voisinage = tab.voisinage(8, 2, 2, 2);
-        // voisinage.display();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        Coords[] regle = {new Coords(0, 0, 0), new Coords(1, 1, 0), new Coords(-1, 0, 0)};
+        Voisinage voisinage = tab.voisinage(regle, 2, 2, 2);
+        voisinage.display();
     }
 }

@@ -51,14 +51,22 @@ public class Voisinage{
         for(Coords e : regle){
             for(int i = 0; i<n; i++){
                 tmp[i] = index[i];
+                if(tmp[i] + e.getCoords()[i] < 0 || tmp[i] + e.getCoords()[i] >= grille.getTaille()){ // WARNING A CHANGER
+                    this.voisinage.add(new Cellule(false));
+                    break;
+                }
                 if(i < e.getCoords().length){
                     tmp[i] += e.getCoords()[i];
                 }
             }
             this.voisinage.add(new Cellule(grille.getState(tmp)));
-            System.out.println("Voisinage ajouté : " + grille.getState(tmp) + " en " + tmp[0] + " " + tmp[1] + " " + tmp[2]);
+            // System.out.print("Voisinage ajouté : " + grille.getState(tmp) + " en " );
+            // for(int i = 0; i < n; i++){
+            //     System.out.print(tmp[i] + " ");
+            // }
+            // System.out.println("");
         }
-        System.out.println("");
+        // System.out.println("");
     }
 
     public ArrayList<Cellule> getVoisinage(){

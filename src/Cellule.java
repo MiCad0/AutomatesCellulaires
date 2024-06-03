@@ -17,6 +17,10 @@ public class Cellule extends TableauDynamiqueND{
         this.etat = etat;
     }
 
+    public Cellule clone(){
+        return new Cellule(this.etat, this.Coords.getCoords());
+    }
+
     public Boolean getEtat(){
         return this.etat;
     }
@@ -25,11 +29,20 @@ public class Cellule extends TableauDynamiqueND{
         this.etat = etat;
     }
 
+    // public void display(){
+    //     for(int c : Coords.getCoords()){
+    //         System.out.print(c + ",");
+    //     }
+    //     System.out.print(" ");
+    // }
+    
     public void display(){
-        for(int c : Coords.getCoords()){
-            System.out.print(c + ",");
+        if(this.etat){
+            System.out.print("X");
         }
-        System.out.print(" ");
+        else{
+            System.out.print("O");
+        }
     }
 
     public void display(int ... index){

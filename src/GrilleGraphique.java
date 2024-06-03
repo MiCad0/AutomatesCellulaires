@@ -73,6 +73,12 @@ public class GrilleGraphique extends JPanel
 		casesAColorier.add(new Point(x, y));
 		repaint();
 	}
+
+	public void effacerCase(int x, int y) 
+	{
+		casesAColorier.remove(new Point(x, y));
+		repaint();
+	}
 	
 	/**
 	 * Accesseur.

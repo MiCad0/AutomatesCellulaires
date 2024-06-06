@@ -232,7 +232,7 @@ public class TableauDynamiqueND {
             tab = tmp.clone();
             tab.display();
             try{
-                Thread.sleep(30);
+                Thread.sleep(300);
             }
             catch(InterruptedException e){
                 e.printStackTrace();

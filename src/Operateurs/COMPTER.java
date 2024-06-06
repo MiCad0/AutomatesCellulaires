@@ -1,7 +1,7 @@
 package Operateurs;
 import Types.Voisinage;
 
-public class COMPTER implements Operateur
+public class COMPTER extends Operateur
 {
     private Voisinage v;
 

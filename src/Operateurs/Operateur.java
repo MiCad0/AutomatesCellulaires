@@ -1,8 +1,8 @@
 package Operateurs;
 
-public interface Operateur
+public abstract class Operateur
 {
-    public int evaluer();
+    public abstract int evaluer();
 
 
 }

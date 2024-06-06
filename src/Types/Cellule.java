@@ -5,16 +5,16 @@ public class Cellule extends TableauDynamiqueND{
     private Coords Coords;
 
     public Cellule(Boolean etat, int ... coords){
-        super(new Coords(coords));
+        super(new Coords( coords));
         this.etat = etat;
-        this.Coords = new Coords(coords.length);
+        this.Coords = new Coords(true, coords.length);
         for(int i = 0; i < coords.length; i++){
             this.Coords.setCoord(i, coords[i]);
         }
     }
 
     public Cellule(Boolean etat){
-        super(new Coords(0));
+        super(new Coords(true, 0));
         this.etat = etat;
     }
 

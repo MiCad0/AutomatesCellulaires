@@ -1,13 +1,13 @@
 package Operateurs;
 
-public class NON implements Operateur
+public class NON extends Operateur
 {
-    private int val;
+    private Operateur val;
 
-    public NON(int val)
+    public NON(Operateur val)
     {
         this.val = val;
     }
     @Override
-    public int evaluer(){ return (val == 0) ? 1 : 0; }
+    public int evaluer(){ return (val.evaluer() == 0) ? 1 : 0; }
 }

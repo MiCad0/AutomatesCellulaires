@@ -1,21 +1,23 @@
 package Main;
-// import javax.swing.JFrame;
 
+import Operateurs.COMPTER;
+import Operateurs.CONST;
+import Operateurs.EQ;
+import Operateurs.OU;
+import Operateurs.Operateur;
+import Operateurs.SI;
 import Types.Coords;
-import Types.RegleDuJeu;
+import Types.G8;
+import Types.G8e;
 import Types.TableauDynamiqueND;
-import Types.Voisinage;
-
-// import java.util.Random;
 
 
 public class Main 
 {
 	public static void main(String[] args)
 	{
-		// int posx, posy;
 
-		TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(2), 5, 5);
+		TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(true, 2), 50, 50);
 
 		Coords[] alive = tab.getAlive();
 
@@ -29,21 +31,9 @@ public class Main
 
 
 		GrilleGraphique grid = new GrilleGraphique(tab.getTaille(), tab.getTab()[0].getTaille(), 8);
-		
-		// Random r = new Random();
+
 		
 		int i;
-		//Trente fois...
-		// for(i=0; i<5; i++)
-		// {
-		// 	//on tire une case au hasard dans la grille
-		// 	posx = r.nextInt(grid.getLargeur());
-		// 	posy = r.nextInt(grid.getHauteur());
-
-		// 	//et on la colorie en rouge
-		// 	tab.changeState(posx, posy);
-		// 	grid.colorierCase(posx, posy);
-		// }
 		tab.changeState(1,1);
 		grid.colorierCase(1,1);
 		tab.changeState(2,1);
@@ -51,48 +41,73 @@ public class Main
 		tab.changeState(3,1);
 		grid.colorierCase(1,3);
 
+		// changement de cases random
+		// for(i = 0; i < 100; i++){
+		// 	int x = (int)(Math.random()*50);
+		// 	int y = (int)(Math.random()*50);
+		// 	tab.changeState(x, y);
+		// 	if(tab.getState(x,y))
+		// 	{
+		// 		grid.colorierCase(y,x);
+		// 	}
+		// 	else
+		// 	{
+		// 		grid.effacerCase(y,x);
+		// 	}
+		// }
+
+		// Vaisseau glider
+		tab.changeState(10,10);
+		grid.colorierCase(10,10);
+		tab.changeState(11,11);
+		grid.colorierCase(11,11);
+		tab.changeState(11,12);
+		grid.colorierCase(12,11);
+		tab.changeState(10,12);
+		grid.colorierCase(12,10);
+		tab.changeState(9,12);
+		grid.colorierCase(12,9);
+
+
 
 		TableauDynamiqueND tmp = tab.clone();
-        Coords[] regle = {new Coords(0, 0), new Coords(-1, -1), new Coords(-1, 0), new Coords(-1, 1), new Coords(0, -1), new Coords(0, 1), new Coords(1, -1), new Coords(1, 0), new Coords(1, 1)};
-        RegleDuJeu regleDuJeu = new RegleDuJeu(new int[]{3}, new int[]{4, 3});
 
 		grid.repaint();
 
 		try{
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		}
 		catch(InterruptedException e){
 			e.printStackTrace();
 		}
 
-		for(int n = 0; n<30; ++n){
-			for(i = 0; i < 5; i++){
-				for(int j = 0; j < 5; j++){
-					Voisinage v = tab.voisinage(regle,j,i);
-					if(tab.getState(j,i)){
-						if(!regleDuJeu.estSurvie(v)){
-							tmp.changeState(j,i);
-							grid.effacerCase(i, j);
-						}
-						else{
-							grid.colorierCase(i, j);
-						}
+		while(true){
+			for(i = 0; i < 50; i++){
+				for(int j = 0; j < 50; j++){
+					Operateur regle = new OU(new SI(new EQ(new COMPTER(new G8e(tab, i,j)),  new CONST(3)),  new CONST(1),  new CONST(0)), new SI(new EQ(new COMPTER(new G8(tab, i,j)),  new CONST(3)), new CONST(1), new CONST(0)));
+					tmp.setState(regle.evaluer(), i,j);
+				}
+			}
+			for(i = 0; i < 50; i++){
+				for(int j = 0; j < 50; j++){
+					if(tmp.getState(i,j)){
+						grid.colorierCase(j,i);
 					}
 					else{
-						if(regleDuJeu.estNee(v)){
-							tmp.changeState(j,i);
-							grid.colorierCase(i, j);
-						}
-						else{
-							grid.effacerCase(i, j);
-						}
+						grid.effacerCase(j,i);
+					}
+					try{
+						Thread.sleep(1);
+					}
+					catch(InterruptedException e){
+						e.printStackTrace();
 					}
 				}
 			}
 			grid.repaint();
 			tab = tmp.clone();
 			try{
-				Thread.sleep(300);
+				Thread.sleep(30);
 			}
 			catch(InterruptedException e){
 				e.printStackTrace();

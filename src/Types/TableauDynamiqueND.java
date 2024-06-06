@@ -1,21 +1,8 @@
 package Types;
 import java.util.Arrays;
 
-    /* En java, mˆeme si la taille d’un tableau peut ˆetre initialis´ee dynamiquement, sa
-    dimension (int [][] tab, ici tab est de dimension 2) est fix´ee `a l’impl´ementation.
-    Pour pouvoir g´en´erer des grilles de dimension d o`u d est donn´ee en entr´ee du
-    programme, vous devrez impl´ementer votre propre structure de donn´ee. Pour
-    cela, il sera n´ecessaire de proposer une classe TableauDynamiqueND (vous
-    serez libres de choisir le noms qui vous conviendra) dont la d´efinition sera
-    r´ecursive : un tableau dynamique n-dimensionnel de taille k1 × k2 × ... × kn
-    r´ealisera l’allocation de k1 tableaux dynamiques (n−1)-dimensionnels de tailles
-    k2 × ... × kn (vous devrez peut-ˆetre vous renseigner sur les m´ethodes `a nombre
-    variable de param`etres). Vous pourrez ´egalement proposer une classe Cellule
-    qui repr´esentera les cellules de la grille.
-    Les automates cellulaires sont ´etudi´es dans le cadre o`u la grille est de taille
-    infinie, le support physique qu’est l’ordinateur nous obligera `a donner une taille
-    maximale. Toute cellule ”en-dehors” de la grille sera consid´er´ee comme toujours
-    ´eteinte si sa valeur doit ˆetre prise en compte dans une r`egle.*/
+import Operateurs.*;
+
 
 public class TableauDynamiqueND {
     private int dimension;
@@ -49,7 +36,7 @@ public class TableauDynamiqueND {
     }
 
     public TableauDynamiqueND clone(){
-        TableauDynamiqueND res = new TableauDynamiqueND(new Coords(this.currentCoords.getCoords().length), this.taille);
+        TableauDynamiqueND res = new TableauDynamiqueND(new Coords(true, this.currentCoords.getCoords().length), this.taille);
         res.dimension = this.dimension;
         for(int i = 0; i < this.taille; i++){
             res.tab[i] = this.tab[i].clone();
@@ -83,6 +70,35 @@ public class TableauDynamiqueND {
         }
         else{
             ((TableauDynamiqueND)tab[index[0]]).changeState(Arrays.copyOfRange(index, 1, index.length));
+        }
+    }
+
+    public void setState(Boolean state, int ... index){
+        if(index.length != dimension){
+            throw new IllegalArgumentException("Le nombre d'index ne correspond pas à la dimension");
+        }
+        for(int i = 0; i < index.length; i++){
+            if(index[0] >= taille){
+                throw new IllegalArgumentException("Index hors de la grille");
+            }
+        }
+        if(index.length == 1){
+            ((Cellule)tab[index[0]]).setEtat(state);
+        }
+        else{
+            ((TableauDynamiqueND)tab[index[0]]).setState(state, Arrays.copyOfRange(index, 1, index.length));
+        }
+    }
+
+    public void setState(int state, int ... coords){
+        if(state == 1){
+            setState(true, coords);
+        }
+        else if(state == 0){
+            setState(false, coords);
+        }
+        else{
+            throw new IllegalArgumentException("L'état doit être 0 ou 1");
         }
     }
 
@@ -133,7 +149,7 @@ public class TableauDynamiqueND {
             for(int i = 0; i < coupe.length; i+=2){
                 newTailles[i/2] = coupe[i+1] - coupe[i]+1;
             }
-            TableauDynamiqueND res = new TableauDynamiqueND(new Coords(newTailles.length), newTailles);
+            TableauDynamiqueND res = new TableauDynamiqueND(new Coords(true, newTailles.length), newTailles);
             for(int i = coupe[0]; i <= coupe[1]; i++){
                 res.tab[i-coupe[0]] = tab[i].slice(Arrays.copyOfRange(coupe, 2, coupe.length));
             }
@@ -171,8 +187,8 @@ public class TableauDynamiqueND {
 
 
     public static void main(String[] args){
-        int tailles[] = {5, 5};
-        TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(tailles.length), tailles);
+        int tailles[] = {30, 30};
+        TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(true, tailles.length), tailles);
         // tab.display();
 		tab.changeState(1,1);
 		tab.changeState(2,1);
@@ -188,12 +204,16 @@ public class TableauDynamiqueND {
         System.out.println();
         System.out.println();
         System.out.println();
-        Coords[] regle = {new Coords(0, 0), new Coords(-1, -1), new Coords(-1, 0), new Coords(-1, 1), new Coords(0, -1), new Coords(0, 1), new Coords(1, -1), new Coords(1, 0), new Coords(1, 1)};
-        Voisinage voisinage = tab.voisinage(regle, 2, 2);
+        Voisinage voisinage = new G8(tab, 1, 1);
         voisinage.display();
+        		// Vaisseau glider
+		tab.changeState(10,10);
+		tab.changeState(11,11);
+		tab.changeState(11,12);
+		tab.changeState(10,12);
+		tab.changeState(9,12);
 
         TableauDynamiqueND tmp = tab.clone();
-        RegleDuJeu regleDuJeu = new RegleDuJeu(new int[]{3}, new int[]{4, 3});
         System.out.println();
         System.out.println();
         System.out.println();
@@ -203,28 +223,21 @@ public class TableauDynamiqueND {
         System.out.println();
 
         for(int n = 0; n<30; ++n){
-			for(int i = 0; i < 5; i++){
-				for(int j = 0; j < 5; j++){
-					if(tab.getState(i,j)){
-						if(!regleDuJeu.estSurvie(tab.voisinage(regle,i,j))){
-							tmp.changeState(i,j);
-						}
-					}
-					else{
-						if(regleDuJeu.estNee(tab.voisinage(regle,i,j))){
-							tmp.changeState(i,j);
-						}
-					}
-				}
-			}
-			tab = tmp.clone();
+            for(int i = 0; i < tab.getTaille(); ++i){
+                for(int j = 0; j < tab.getTaille(); ++j){
+                    Operateur regle = new OU(new SI(new EQ(new COMPTER(new G8e(tab, i,j)), new CONST(3)), new CONST(1), new CONST(0)), new SI(new EQ(new COMPTER(new G8(tab, i,j)), new CONST(3)), new CONST(1), new CONST(0)));
+                    tmp.setState(regle.evaluer(), i,j);
+                }
+            }
+            tab = tmp.clone();
             tab.display();
-			try{
-				Thread.sleep(300);
-			}
-			catch(InterruptedException e){
-				e.printStackTrace();
-			}
-		}
+            try{
+                Thread.sleep(30);
+            }
+            catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
     }
 }

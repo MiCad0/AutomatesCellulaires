@@ -1,10 +1,10 @@
 package Operateurs;
 
-public class SI implements Operateur
+public class SI extends Operateur
 {
-    int val1, val2, val3;
+    private Operateur val1, val2, val3;
 
-    public SI(int val1, int val2, int val3)
+    public SI(Operateur val1, Operateur val2, Operateur val3)
     {
         this.val1 = val1;
         this.val2 = val2;
@@ -12,5 +12,5 @@ public class SI implements Operateur
     }
 
     @Override
-    public int evaluer(){ return (val1 != 0) ? val2 : val3; }
+    public int evaluer(){ return (val1.evaluer() != 0) ? val2.evaluer() : val3.evaluer(); }
 }

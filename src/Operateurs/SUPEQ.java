@@ -1,15 +1,15 @@
 package Operateurs;
 
-public class SUPEQ implements Operateur
+public class SUPEQ extends Operateur
 {
-    private int val1, val2;
+    private Operateur val1, val2;
 
-    public SUPEQ(int val1, int val2)
+    public SUPEQ(Operateur val1, Operateur val2)
     {
         this.val1 = val1;
         this.val2 = val2;
     }
 
     @Override
-    public int evaluer(){ return (val1 >= val2) ? 1 : 0;}
+    public int evaluer(){ return (val1.evaluer() >= val2.evaluer()) ? 1 : 0;}
 }

@@ -2,10 +2,12 @@ package Types;
 public class Coords {
     int [] values;
 
-    public Coords(int size){
-        this.values = new int[size];
-        for(int i = 0; i < size; i++){
-            this.values[i] = 0;
+    public Coords(Boolean isSize, int size){
+        if(isSize){
+            this.values = new int[size];
+            for(int i = 0; i < size; i++){
+                this.values[i] = 0;
+            }
         }
     }
 

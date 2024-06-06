@@ -1,8 +1,5 @@
 package Operateurs;
 import Types.Voisinage;
-import Types.Cellule;
-
-import java.util.ArrayList;
 
 public class COMPTER implements Operateur
 {
@@ -16,11 +13,6 @@ public class COMPTER implements Operateur
     @Override
     public int evaluer()
     {
-        int r = 0;
-        ArrayList<Cellule> voisinages = v.getVoisinage();
-        for(Cellule c : voisinages)
-            if(c.getEtat())
-                r += 1;
-        return r;
+        return v.getNbAlive();
     }
 }

@@ -17,7 +17,7 @@ public class Main
 	public static void main(String[] args)
 	{
 
-		TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(true, 2), 50, 50);
+		TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(true, 2), 30, 30);
 
 		Coords[] alive = tab.getAlive();
 
@@ -82,14 +82,14 @@ public class Main
 		}
 
 		while(true){
-			for(i = 0; i < 50; i++){
-				for(int j = 0; j < 50; j++){
+			for(i = 0; i < 30; i++){
+				for(int j = 0; j < 30; j++){
 					Operateur regle = new OU(new SI(new EQ(new COMPTER(new G8e(tab, i,j)),  new CONST(3)),  new CONST(1),  new CONST(0)), new SI(new EQ(new COMPTER(new G8(tab, i,j)),  new CONST(3)), new CONST(1), new CONST(0)));
 					tmp.setState(regle.evaluer(), i,j);
 				}
 			}
-			for(i = 0; i < 50; i++){
-				for(int j = 0; j < 50; j++){
+			for(i = 0; i < 30; i++){
+				for(int j = 0; j < 30; j++){
 					if(tmp.getState(i,j)){
 						grid.colorierCase(j,i);
 					}
@@ -104,7 +104,6 @@ public class Main
 					}
 				}
 			}
-			grid.repaint();
 			tab = tmp.clone();
 			try{
 				Thread.sleep(30);

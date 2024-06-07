@@ -24,7 +24,7 @@ public class Main extends JFrame {
 	private TableauDynamiqueND tab;
 
 	public Main() {
-		tab = new TableauDynamiqueND(new Coords(true, 3), 10, 30, 30);
+		tab = new TableauDynamiqueND(new Coords(true, 3), 10, 150, 200);
 		WIDTH = 8*tab.getTab()[0].getTab()[0].getTaille()+66;
 		HEIGHT = 8*tab.getTab()[0].getTaille()+66;
 		setTitle("Jeu de la Vie!");
@@ -47,13 +47,15 @@ public class Main extends JFrame {
 		}
 
 		// On colorie des cellules aléatoirement
-		// for (int i = 0; i < tab.getTaille(); i++) {
-		// 	for (int j = 0; j < tab.getTab()[1].getTaille(); j++) {
-		// 		if (Math.random() < 0.1) {
-		// 			tab.changeState(i, j);
-		// 		}
-		// 	}
-		// }
+		for (int i = 0; i < tab.getTaille(); i++) {
+			for (int j = 0; j < tab.getTab()[0].getTaille(); j++) {
+				for (int k = 0; k < tab.getTab()[0].getTab()[0].getTaille(); k++) {
+					if (Math.random() < 0.1) {
+						tab.changeState(i, j, k);
+					}
+				}
+			}
+		}
 
 
 		// Interface Graphique
@@ -126,6 +128,11 @@ public class Main extends JFrame {
 	}
 
 	private void runGameOfLife() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		while (true) {
 			if (!running) {
 				try {
@@ -138,9 +145,8 @@ public class Main extends JFrame {
 			TableauDynamiqueND tmp = tab.clone();
 			for (int i = 0; i < tab.getTaille(); i++) {
 				TableauDynamiqueND tabForCalculation = tab.slice(i);
-				for (int j = 0; j < tab.getTab()[i].getTaille(); j++) {
-					for(int k = 0; k < tab.getTab()[i].getTab()[j].getTaille(); k++){
-						System.out.println(tabForCalculation.getDimension());
+				for (int j = 0; j < tabForCalculation.getTaille(); j++) {
+					for(int k = 0; k < tabForCalculation.getTab()[j].getTaille(); k++){
 						Operateur regle = new OU(new SI(new EQ(new COMPTER(new G8e(tabForCalculation, j, k)), new CONST(3)), new CONST(1), new CONST(0)), new SI(new EQ(new COMPTER(new G8(tabForCalculation, j, k)), new CONST(3)), new CONST(1), new CONST(0)));
 						tmp.setState(regle.evaluer(), i, j, k);
 					}

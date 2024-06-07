@@ -13,21 +13,20 @@ public class Voisinage{
         int[] newVoisin = new int[n]; // Tableau pour stocker les coordonnées du voisin à ajouter
         Boolean oob = false; // Variable pour vérifier si le voisin est en dehors de la grille
         for(Coords e : regle){ // Pour chaque règle de voisinage
+            TableauDynamiqueND tmp = grille; // On crée une copie de la grille
             for(int i = 0; i<n; i++){ // Pour chaque dimension de la grille
+                if(i == n-1){ // Si on est à la dernière dimension de la grille (dernière coordonnée du voisin)
+                    tmp = tmp.slice(0); // On récupère le tableau dynamique correspondant aux coordonnées du voisin
+                }
                 oob = false;
                 newVoisin[i] = index[i]; // On initialise les coordonnées du voisin avec les coordonnées de la cellule courante
-                if(newVoisin[i] + e.getCoords()[i] < 0 || newVoisin[i] + e.getCoords()[i] >= grille.getTaille()){ // Si le voisin est en dehors de la grille
+                if(newVoisin[i] + e.getCoords()[i] < 0 || newVoisin[i] + e.getCoords()[i] >= tmp.getTaille()){ // Si le voisin est en dehors de la grille
                     this.voisinage.add(new Cellule(false)); // On ajoute une cellule morte au voisinage
                     oob = true; // On indique que le voisin est en dehors de la grille
                     break; // On arrête la boucle pour passer à la règle de voisinage suivante
                 }
                 if(i < e.getCoords().length){ // Tant que la coordonnée de la règle de voisinage a une dimension inférieure à celle de la grille 
                     newVoisin[i] += e.getCoords()[i]; // On ajoute les coordonnées aux coordonnées du voisin
-                }
-                if(grille.getTab()[newVoisin[i]] == null){ // Si la cellule du voisin est vide
-                    this.voisinage.add(new Cellule(false)); // On ajoute une cellule morte au voisinage
-                    oob = true; // On indique que le voisin est en dehors de la grille
-                    break; // On arrête la boucle pour passer à la règle de voisinage suivante
                 }
             }
             if(!oob) // Si le voisin n'est pas en dehors de la grille

@@ -56,6 +56,10 @@ public class TableauDynamiqueND {
         return this.tab;
     }
 
+    public void setTab(TableauDynamiqueND[] tab){
+        this.tab = tab;
+    }
+
     public void changeState(int ... index){
         if(index.length != dimension){
             throw new IllegalArgumentException("Le nombre d'index ne correspond pas à la dimension");
@@ -135,25 +139,13 @@ public class TableauDynamiqueND {
         }
     }
 
-    // Prend un couple de m coordonnées et renvoie le tableau dynamique n-m dimensionnel correspondant
+    // Prend m coordonnées et renvoie le tableau dynamique n-m dimensionnel correspondant
     public TableauDynamiqueND slice(int ... coupe){
-        if (coupe.length %2 != 0){
-            throw new IllegalArgumentException("Le nombre de coordonnées doit être pair");
-        }
-
         if(coupe.length == 0){
             return this;
         }
         else{
-            int[] newTailles = new int[coupe.length/2];
-            for(int i = 0; i < coupe.length; i+=2){
-                newTailles[i/2] = coupe[i+1] - coupe[i]+1;
-            }
-            TableauDynamiqueND res = new TableauDynamiqueND(new Coords(true, newTailles.length), newTailles);
-            for(int i = coupe[0]; i <= coupe[1]; i++){
-                res.tab[i-coupe[0]] = tab[i].slice(Arrays.copyOfRange(coupe, 2, coupe.length));
-            }
-            return res;
+            return tab[coupe[0]].slice(Arrays.copyOfRange(coupe, 1, coupe.length));
         }
     }
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Voisinage{
     private ArrayList<Cellule> voisinage; // Liste des cellules voisines
-    private Coords[] regle; // Règles de voisinage
+    protected Coords[] regle; // Règles de voisinage
 
     public Voisinage(Coords[] regle, TableauDynamiqueND grille, int ... index){
         this.regle = regle;

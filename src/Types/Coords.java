@@ -9,6 +9,10 @@ public class Coords {
                 this.values[i] = 0;
             }
         }
+        else{
+            this.values = new int[1];
+            this.values[0] = size;
+        }
     }
 
     public Coords(int ... values){

@@ -2,6 +2,7 @@ package Types;
 
 import java.util.ArrayList;
 
+
 public class Voisinage{
     private ArrayList<Cellule> voisinage; // Liste des cellules voisines
     protected Coords[] regle; // Règles de voisinage
@@ -15,7 +16,7 @@ public class Voisinage{
         for(Coords e : regle){ // Pour chaque règle de voisinage
             TableauDynamiqueND tmp = grille; // On crée une copie de la grille
             for(int i = 0; i<n; i++){ // Pour chaque dimension de la grille
-                if(i == n-1){ // Si on est à la dernière dimension de la grille (dernière coordonnée du voisin)
+                if(i == n-1 && n!=1){ // Si on est à la dernière dimension de la grille (dernière coordonnée du voisin) (pour la grille 2d)
                     tmp = tmp.slice(0); // On récupère le tableau dynamique correspondant aux coordonnées du voisin
                 }
                 oob = false;

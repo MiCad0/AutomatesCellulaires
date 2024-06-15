@@ -8,7 +8,7 @@ public class TableauDynamiqueND {
     private int dimension;
     private int taille;
     private TableauDynamiqueND[] tab;
-    Coords currentCoords;
+    private Coords currentCoords;
 
     public TableauDynamiqueND(Coords coords, int ... taille){
         this.currentCoords = coords;
@@ -153,6 +153,10 @@ public class TableauDynamiqueND {
         return new Voisinage(regle, this, index);
     }
 
+    public int[] getCoords(){
+        return this.currentCoords.getCoords();
+    }
+
     // récupère les coordonnées des cellules vivantes
     public Coords[] getAlive(){
         Coords[] res = new Coords[taille^dimension];
@@ -175,61 +179,5 @@ public class TableauDynamiqueND {
             }
         }
         return res;
-    }
-
-
-    public static void main(String[] args){
-        int tailles[] = {30, 30};
-        TableauDynamiqueND tab = new TableauDynamiqueND(new Coords(true, tailles.length), tailles);
-        // tab.display();
-		tab.changeState(1,1);
-		tab.changeState(2,1);
-		tab.changeState(3,1);
-        System.out.println();
-        tab.slice( 1, 1).display();
-        Coords[] alive = tab.getAlive();
-        for(Coords c : alive){
-            if(c != null){
-                c.display();
-            }
-        }
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        Voisinage voisinage = new G8(tab, 1, 1);
-        voisinage.display();
-        		// Vaisseau glider
-		tab.changeState(10,10);
-		tab.changeState(11,11);
-		tab.changeState(11,12);
-		tab.changeState(10,12);
-		tab.changeState(9,12);
-
-        TableauDynamiqueND tmp = tab.clone();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        tab.display();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        for(int n = 0; n<30; ++n){
-            for(int i = 0; i < tab.getTaille(); ++i){
-                for(int j = 0; j < tab.getTaille(); ++j){
-                    Operateur regle = new OU(new SI(new EQ(new COMPTER(new G8e(tab, i,j)), new CONST(3)), new CONST(1), new CONST(0)), new SI(new EQ(new COMPTER(new G8(tab, i,j)), new CONST(3)), new CONST(1), new CONST(0)));
-                    tmp.setState(regle.evaluer(), i,j);
-                }
-            }
-            tab = tmp.clone();
-            tab.display();
-            try{
-                Thread.sleep(300);
-            }
-            catch(InterruptedException e){
-                e.printStackTrace();
-            }
-        }
-
     }
 }

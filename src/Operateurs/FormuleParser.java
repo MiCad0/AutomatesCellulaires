@@ -1,22 +1,23 @@
 package Operateurs;
 
 import Types.*;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.Dictionary;
 
 public class FormuleParser
 {
 	private String formule;
 	private TableauDynamiqueND grille;
 	private int[] index;
+	private Dictionary<String, Coords[]> regles;
 
-	// SI( EQ(COM P T ER(G0), 1),SI(SU P EQ(COM P T ER(G8), 4), 0, 1),SI(EQ(COMPTER(G8), 2), 1, 0) )
-	public FormuleParser(String formule, TableauDynamiqueND grille, int ... index)
+	public FormuleParser(String formule, TableauDynamiqueND grille, Dictionary<String, Coords[]> regles,  int ... index)
 	{
 		this.formule = formule.replaceAll("\\s+", "");
 		this.grille = grille;
 		this.index = index;
+		this.regles = regles;
 	}
 
 	public Operateur parse()
@@ -50,11 +51,11 @@ public class FormuleParser
 
 				while (!stack.isEmpty() && !stack.peek().equals("("))
 				{
-					if (stack.peek().equals(","))
-					{
-						stack.pop();
-						continue;
-					}
+					// if (stack.peek().equals(","))
+					// {
+					// 	stack.pop();
+					// 	continue;
+					// }
 					arguments.addFirst(stack.pop());
 				}
 				stack.pop();
@@ -219,9 +220,18 @@ public class FormuleParser
 								stack.push(op);
 								break;
 							default:
-								throw new IllegalArgumentException("Argument de COMPTER invalide");
+								// Verifie si present dans les regles
+								if (regles.get(argCOMPTER) != null)
+								{
+									op = new COMPTER(new Voisinage(regles.get(argCOMPTER) , grille, index));
+									stack.push(op);
+								}
+								else
+									throw new IllegalArgumentException("Argument de COMPTER invalide");
 						}
 						break;
+					default:
+						throw new IllegalArgumentException("Operateur inconnu");
 
 				}
 			}
@@ -233,13 +243,14 @@ public class FormuleParser
 					stack.push(argument);
 					sb = new StringBuilder();
 				}
-				stack.push(",");
+				// stack.push(",");
 			}
 			else
 			{
 				sb.append(c);
 			}
 		}
+
 		if(stack.size() == 1)
 			return (Operateur) stack.pop();
 		else

@@ -27,10 +27,24 @@ public class Coords {
         this.values[index] = value;
     }
 
-    public void display(){
+    @Override
+    public String toString(){
+        String res = "[";
+        int i = 0;
         for(int c : values){
-            System.out.print(c + ",");
+            if(i++ == 0){
+                res += c;
+            }
+            else{
+                res += "," + c;
+            
+            }
         }
-        System.out.print(" ");
+        res += "]";
+        return res;
+    }
+
+    public void display(){
+        System.out.print(this);
     }
 }

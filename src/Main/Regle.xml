@@ -1,0 +1,11 @@
+<!-- exemple d'implémentation du XML avec les règles de Conway (les voisinages G8 et G8* étant déjà définis, sont donnés à titre d'exemple) -->
+
+<regles>
+    <dimensions>2</dimensions>
+    <tailles>100,200</tailles>
+    <regle>OU(SI(EQ(COMPTER(G8*),3), 1, 0), SI(EQ(COMPTER(G8), 3), 1, 0))</regle>
+    <voisinage>G8,G8*</voisinage>
+    <regleDeVoisinage>[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1];[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]</regleDeVoisinage>
+    <random>15</random>
+    <plan>(0,:,:)</plan>
+</regles>

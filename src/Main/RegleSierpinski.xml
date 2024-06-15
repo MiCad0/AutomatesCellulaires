@@ -1,0 +1,7 @@
+<!-- Triangle de Sierpinski -->
+
+<regles>
+    <dimensions>1</dimensions>
+    <tailles>200</tailles>
+    <regle>SI(EQ(COMPTER(G2),1),1,0)</regle>
+</regles>

@@ -65,6 +65,9 @@ public class ReadXML {
 
             if(randomList.getLength() == 1){
                 random = Integer.parseInt(randomList.item(0).getTextContent());
+                if (random < 0 || random > 100){
+                    throw new IllegalArgumentException("Le pourcentage de cellules vivantes doit être compris entre 0 et 100");
+                }
             }
 
             if(regleDeVoisinageList.getLength() > 0){
